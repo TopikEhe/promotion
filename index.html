@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arisu Bot Premium - Sewa Bot WhatsApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --dark: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(-50px, -50px) rotate(180deg); }
+        }
+
+        /* Stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        /* Moon/Sun Decoration */
+        .celestial-body {
+            position: fixed;
+            top: 50px;
+            right: 50px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .celestial-body.ramadhan {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            box-shadow: 0 0 40px rgba(251, 191, 36, 0.5);
+        }
+
+        .celestial-body.idul-fitri {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
+        }
+
+        .celestial-body.normal {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Promo Banner */
+        .promo-banner {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(16, 185, 129, 0.2));
+            border: 2px solid var(--accent);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shine 3s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .promo-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .promo-discount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .promo-period {
+            color: var(--text-muted);
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
+        /* Features Grid */
+        .features-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            margin-bottom: 50px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .pricing-card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.personal {
+            border-color: var(--primary);
+        }
+
+        .pricing-card.group {
+            border-color: var(--secondary);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pricing-type {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .pricing-type.personal { color: var(--primary); }
+        .pricing-type.group { color: var(--secondary); }
+
+        .pricing-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent), #f97316);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pricing-list {
+            list-style: none;
+        }
+
+        .pricing-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .pricing-item:last-child {
+            border-bottom: none;
+        }
+
+        .duration {
+            font-weight: 500;
+        }
+
+        .price-container {
+            text-align: right;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .discounted-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+
+        .permanent .discounted-price {
+            color: #f59e0b;
+        }
+
+        /* Payment Methods */
+        .payment-section {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .payment-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .payment-method {
+            background: rgba(255,255,255,0.05);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* CTA Button */
+        .cta-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo { font-size: 2rem; }
+            .promo-discount { font-size: 2.5rem; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .celestial-body { width: 60px; height: 60px; top: 20px; right: 20px; }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: confetti-fall 3s ease-out forwards;
+            z-index: 100;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-animation"></div>
+    <div class="stars" id="stars"></div>
+    <div class="celestial-body" id="celestial"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span>💎</span>
+                <span>ARISU BOT PREMIUM</span>
+            </div>
+            <p class="tagline">
+                Arisu bukan sekadar bot. Dia bisa bantu kamu kapan aja, buat apa aja. 
+                Cepat, lengkap, dan gampang dipakai.
+            </p>
+        </header>
+
+        <!-- Dynamic Promo Banner -->
+        <div class="promo-banner" id="promoBanner">
+            <div class="promo-title">
+                <span id="promoIcon">🌙</span>
+                <span id="promoTitleText">PROMO BULAN SUCI RAMADHAN</span>
+            </div>
+            <div class="promo-discount" id="discountText">DISKON 25%</div>
+            <div class="promo-period" id="promoPeriod">Berlaku selama bulan Ramadhan</div>
+        </div>
+
+        <!-- Features -->
+        <section class="features-section fade-in">
+            <h2 class="section-title">
+                <span>✨</span> Fitur Utama
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3 class="feature-title">AI Generator</h3>
+                    <p class="feature-desc">Bikin gambar dan tulisan otomatis dengan kecerdasan buatan</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">Game Interaktif</h3>
+                    <p class="feature-desc">Main game seru langsung di grup WhatsApp</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3 class="feature-title">Pengatur Grup</h3>
+                    <p class="feature-desc">Atur grup biar tetap aman, rapi, dan bebas spam</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3 class="feature-title">No Delay</h3>
+                    <p class="feature-desc">Respon cepat tanpa jeda waktu untuk pengalaman terbaik</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Benefits -->
+        <section class="features-section fade-in">
+            <h2 class="section-title">
+                <span>⚡</span> Keunggulan Premium
+            </h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">Server Cepat</h3>
+                    <p class="feature-desc">Akses server premium yang stabil dan super cepat</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title">Fitur Eksklusif</h3>
+                    <p class="feature-desc">Fitur spesial yang hanya tersedia untuk user premium</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="feature-title">Support Langsung</h3>
+                    <p class="feature-desc">Bisa hubungi owner langsung kalau butuh bantuan</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="pricing-section fade-in">
+            <h2 class="section-title">
+                <span>💰</span> Paket Harga
+            </h2>
+            <div class="pricing-grid">
+                <!-- Personal -->
+                <div class="pricing-card personal">
+                    <div class="pricing-header">
+                        <div class="pricing-type personal">💎 Personal</div>
+                        <span class="pricing-badge">Best Value</span>
+                    </div>
+                    <ul class="pricing-list" id="personalList">
+                        <!-- Generated by JS -->
+                    </ul>
+                </div>
+
+                <!-- Group -->
+                <div class="pricing-card group">
+                    <div class="pricing-header">
+                        <div class="pricing-type group">🏠 Sewa Grup</div>
+                        <span class="pricing-badge">Anti-Link & Game</span>
+                    </div>
+                    <ul class="pricing-list" id="groupList">
+                        <!-- Generated by JS -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment -->
+        <section class="payment-section fade-in">
+            <h3 class="payment-title">💳 Metode Pembayaran</h3>
+            <div class="payment-methods">
+                <div class="payment-method">QRIS</div>
+                <div class="payment-method">Dana</div>
+                <div class="payment-method">GoPay</div>
+                <div class="payment-method">ShopeePay</div>
+                <div class="payment-method">Seabank</div>
+                <div class="payment-method">BRI</div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta-section fade-in">
+            <a href="https://wa.me/6283198630732" class="cta-button" target="_blank">
+                <span>📞</span>
+                <span>Order Sekarang via WhatsApp</span>
+            </a>
+            <p style="margin-top: 15px; color: var(--text-muted); font-size: 0.9rem;">
+                Promo terbatas! Buruan order sebelum kehabisan!
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Dengan langganan, kamu bantu Arisu tetap aktif dan terus berkembang.</p>
+            <p style="margin-top: 10px;">_Powered by <a href="#">ICSF Team</a>_</p>
+        </footer>
+    </div>
+
+    <script>
+        // Data harga
+        const prices = {
+            personal: [
+                { duration: '15 hari', original: 10000, permanent: false },
+                { duration: '30 hari', original: 20000, permanent: false },
+                { duration: '60 hari', original: 35000, permanent: false },
+                { duration: 'Permanen', original: 50000, permanent: true }
+            ],
+            group: [
+                { duration: '10 hari', original: 20000, permanent: false },
+                { duration: '30 hari', original: 35000, permanent: false },
+                { duration: 'Permanen', original: 80000, permanent: true }
+            ]
+        };
+
+        // Cek periode promo (gunakan tanggal Hijriah estimasi)
+        function getPromoPeriod() {
+            const now = new Date();
+            const year = now.getFullYear();
+
+            // Estimasi tanggal Ramadhan dan Idul Fitri 2025-2026
+            // Ramadhan 2026: estimasi 17 Februari - 18 Maret 2026
+            // Idul Fitri 2026: estimasi 19-21 Maret 2026
+
+            const ramadhan2026 = { start: new Date('2026-02-17'), end: new Date('2026-03-18') };
+            const idulFitri2026 = { start: new Date('2026-03-19'), end: new Date('2026-03-21') };
+
+            // Cek Idul Fitri dulu (prioritas)
+            if (now >= idulFitri2026.start && now <= idulFitri2026.end) {
+                return { type: 'idul-fitri', discount: 30, icon: '🎉', title: 'SELAMAT HARI RAYA IDUL FITRI' };
+            }
+
+            // Cek Ramadhan
+            if (now >= ramadhan2026.start && now <= ramadhan2026.end) {
+                return { type: 'ramadhan', discount: 25, icon: '🌙', title: 'PROMO BULAN SUCI RAMADHAN' };
+            }
+
+            // Default: normal
+            return { type: 'normal', discount: 0, icon: '💎', title: 'PAKET PREMIUM' };
+        }
+
+        // Format harga
+        function formatPrice(price) {
+            return 'Rp' + price.toLocaleString('id-ID');
+        }
+
+        // Hitung harga diskon
+        function calculateDiscount(price, discountPercent) {
+            return Math.round(price * (1 - discountPercent / 100));
+        }
+
+        // Render pricing list
+        function renderPricing() {
+            const promo = getPromoPeriod();
+            const discount = promo.discount;
+
+            // Render Personal
+            const personalList = document.getElementById('personalList');
+            personalList.innerHTML = prices.personal.map(item => {
+                const discounted = calculateDiscount(item.original, discount);
+                const showDiscount = discount > 0;
+                return `
+                    <li class="pricing-item ${item.permanent ? 'permanent' : ''}">
+                        <span class="duration">${item.duration}</span>
+                        <div class="price-container">
+                            ${showDiscount ? `<div class="original-price">${formatPrice(item.original)}</div>` : ''}
+                            <div class="discounted-price">${formatPrice(showDiscount ? discounted : item.original)}</div>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+
+            // Render Group
+            const groupList = document.getElementById('groupList');
+            groupList.innerHTML = prices.group.map(item => {
+                const discounted = calculateDiscount(item.original, discount);
+                const showDiscount = discount > 0;
+                return `
+                    <li class="pricing-item ${item.permanent ? 'permanent' : ''}">
+                        <span class="duration">${item.duration}</span>
+                        <div class="price-container">
+                            ${showDiscount ? `<div class="original-price">${formatPrice(item.original)}</div>` : ''}
+                            <div class="discounted-price">${formatPrice(showDiscount ? discounted : item.original)}</div>
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        // Update promo banner
+        function updatePromo() {
+            const promo = getPromoPeriod();
+
+            document.getElementById('promoIcon').textContent = promo.icon;
+            document.getElementById('promoTitleText').textContent = promo.title;
+            document.getElementById('discountText').textContent = promo.discount > 0 ? `DISKON ${promo.discount}%` : 'BEST PRICE';
+            document.getElementById('promoPeriod').textContent = promo.discount > 0 ? 
+                (promo.type === 'idul-fitri' ? 'Berlaku saat Hari Raya Idul Fitri' : 'Berlaku selama bulan Ramadhan') : 
+                'Harga terbaik untuk pengalaman terbaik';
+
+            // Update celestial body
+            const celestial = document.getElementById('celestial');
+            celestial.className = `celestial-body ${promo.type}`;
+
+            // Trigger confetti if Idul Fitri
+            if (promo.type === 'idul-fitri') {
+                createConfetti();
+            }
+        }
+
+        // Create stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 50; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const colors = ['#f59e0b', '#10b981', '#6366f1', '#ec4899', '#8b5cf6'];
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 100);
+            }
+        }
+
+        // Intersection Observer for fade-in animations
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createStars();
+            updatePromo();
+            renderPricing();
+            observeElements();
+        });
+
+        // Cek perubahan hari setiap menit
+        setInterval(() => {
+            updatePromo();
+            renderPricing();
+        }, 60000);
+    </script>
+</body>
+</html>
